@@ -1,0 +1,114 @@
+version: '3.8'
+
+services:
+  # ============================================================================
+  # NEXUS AI Core Application (FastAPI Backend + React Frontend Bundle)
+  # ============================================================================
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: nexus-ai-app
+    restart: unless-stopped
+    ports:
+      - "8000:8000"
+    environment:
+      - APP_NAME=NEXUS AI
+      - APP_ENV=production
+      - DEBUG=False
+      - DATABASE_URL=postgresql+asyncpg://nexus:nexus@postgres:5432/nexus_db
+      - QDRANT_URL=http://qdrant:6333
+      - REDIS_URL=redis://redis:6379/0
+      - OPENAI_API_KEY=${OPENAI_API_KEY:-}
+      - TAVILY_API_KEY=${TAVILY_API_KEY:-}
+      - SEMANTIC_SCHOLAR_API_KEY=${SEMANTIC_SCHOLAR_API_KEY:-}
+      - SECRET_KEY=${SECRET_KEY:-nexus_super_secret_jwt_encryption_key_change_in_production_32chars!}
+    volumes:
+      - uploads_data:/app/uploads
+      - reports_data:/app/reports
+    depends_on:
+      postgres:
+        condition: service_healthy
+      qdrant:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - nexus-network
+
+  # ============================================================================
+  # PostgreSQL Relational Database
+  # ============================================================================
+  postgres:
+    image: postgres:16-alpine
+    container_name: nexus-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: nexus_db
+      POSTGRES_USER: nexus
+      POSTGRES_PASSWORD: nexus
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U nexus -d nexus_db"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - nexus-network
+
+  # ============================================================================
+  # Qdrant Vector Storage
+  # ============================================================================
+  qdrant:
+    image: qdrant/qdrant:v1.9.0
+    container_name: nexus-qdrant
+    restart: unless-stopped
+    ports:
+      - "6333:6333"
+      - "6334:6334"
+    volumes:
+      - qdrant_data:/qdrant/storage
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:6333/healthz || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - nexus-network
+
+  # ============================================================================
+  # Redis Cache & Pub/Sub
+  # ============================================================================
+  redis:
+    image: redis:7-alpine
+    container_name: nexus-redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - nexus-network
+
+# ==============================================================================
+# Persistent Volumes & Networks
+# ==============================================================================
+volumes:
+  postgres_data:
+  qdrant_data:
+  redis_data:
+  uploads_data:
+  reports_data:
+
+networks:
+  nexus-network:
+    driver: bridge
+

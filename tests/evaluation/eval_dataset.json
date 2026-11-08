@@ -1,0 +1,71 @@
+[
+  {
+    "id": "eval_001",
+    "query": "Investigate cyclic state graphs and multi-agent coordination architectures",
+    "domain": "Artificial Intelligence",
+    "ground_truth_concepts": [
+      "cyclic state graph",
+      "state machine",
+      "error recovery",
+      "verification loop",
+      "role specialization"
+    ],
+    "ground_truth_min_sources": 3,
+    "test_claims": [
+      {
+        "claim": "Cyclic state graphs enable self-correcting agent teams through iterative feedback transitions.",
+        "expected_status": "verified"
+      },
+      {
+        "claim": "Autonomous flying cars reached 100% adoption across London in 2021.",
+        "expected_status": "unsupported"
+      }
+    ]
+  },
+  {
+    "id": "eval_002",
+    "query": "Evaluate RAG chunking strategies and dense semantic vector retrieval with Qdrant",
+    "domain": "Information Retrieval",
+    "ground_truth_concepts": [
+      "chunking",
+      "sliding window",
+      "embeddings",
+      "cosine similarity",
+      "qdrant"
+    ],
+    "ground_truth_min_sources": 2,
+    "test_claims": [
+      {
+        "claim": "Dense vector retrieval calculates cosine similarity across embeddings to match semantic intent.",
+        "expected_status": "verified"
+      },
+      {
+        "claim": "Relational databases completely eliminate the need for vector indexing in high-dimensional search.",
+        "expected_status": "unsupported"
+      }
+    ]
+  },
+  {
+    "id": "eval_003",
+    "query": "Examine citation grounding and hallucination reduction mechanisms in autonomous agent swarms",
+    "domain": "AI Safety & Alignment",
+    "ground_truth_concepts": [
+      "citation grounding",
+      "hallucination reduction",
+      "audit loop",
+      "evidence quote"
+    ],
+    "ground_truth_min_sources": 2,
+    "test_claims": [
+      {
+        "claim": "Multi-agent systems divide cognitive responsibilities to verify assertions against cited evidence.",
+        "expected_status": "verified"
+      },
+      {
+        "claim": "Unchecked generative LLMs never produce false attributions or fabricated citations.",
+        "expected_status": "unsupported"
+      }
+    ]
+  }
+]
+
