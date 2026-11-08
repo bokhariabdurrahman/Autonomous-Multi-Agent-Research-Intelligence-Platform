@@ -157,4 +157,3 @@ async def test_ai_benchmark_evaluation():
     assert avg_relevance >= 50.0
     assert avg_citation_acc >= 75.0
     assert task_completion == 1.0
-

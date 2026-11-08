@@ -169,7 +169,7 @@ nexus-ai/
 
 1. **Clone the repository**:
    ```bash
-   git clone https://github.com/nexus-ai/nexus-ai.git
+   git clone https://github.com/bokhariabdurrahman/Autonomous-Multi-Agent-Research-Intelligence-Platform.git
    cd nexus-ai
    ```
 
