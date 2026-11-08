@@ -1,11 +1,18 @@
 """NEXUS AI - Main FastAPI Application Entrypoint."""
 
+import os
+import sys
+
+# Ensure backend directory is in sys.path regardless of working directory
+backend_dir = os.path.dirname(os.path.abspath(__file__))
+if backend_dir not in sys.path:
+    sys.path.insert(0, backend_dir)
+
 from contextlib import asynccontextmanager
 from fastapi import FastAPI, Request, status
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse, JSONResponse
 from fastapi.staticfiles import StaticFiles
-import os
 
 from app.api import api_router
 from app.core.config import settings
